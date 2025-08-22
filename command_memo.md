@@ -32,6 +32,8 @@ httpd-chihiro   1/1     Running   0          6d20h   10.42.0.22   lima-rancher-d
 nginx-chihiro   1/1     Running   0          6d20h   10.42.0.21   lima-rancher-desktop   <none>           <none>
 ```
 
+-> ここで表示されたIPアドレスに対して、pod 同士で ping を通したり curl をたたいたりすることができる
+
 # コマンドの実行
 
 ## podに入って bash でコマンドを実行する
