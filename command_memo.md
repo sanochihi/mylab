@@ -1,10 +1,40 @@
+# 前提
+
+シェルの設定で、alias k='kubectl' を指定済み
+
 # 作成
 
-## yamlの定義から pod を作る
+## yamlの定義から pod/deployment を作る
 
 ```
 k apply -f [yamlのファイルパス]
 ```
+
+-> yaml の定義（kind:）がPod なら pod, Deployment ならデプロイメントができる
+
+## Deployment の作成
+
+```
+k create deploy [pod名のプレフィックス] --image=[image名] --replicas=[レプリカ数]
+```
+
+## ドライラン
+
+pod をやデプロイメントを実際には作成せずに、定義ファイルだけを出力する
+
+### podの場合
+
+```
+k run [pod名] --image=[image名] --dry-run=client -o yaml
+```
+
+### デプロイメントの場合
+
+```
+k create deploy [デプロイ名] --image=[image名] --replicas=[replica数] --dry-run=client -o yaml
+```
+
+-> これらを yaml ファイルに吐き出し、必要な部分を編集することで同じ pod や deployment を繰り返し作ることができる
 
 # 管理
 
@@ -34,6 +64,31 @@ nginx-chihiro   1/1     Running   0          6d20h   10.42.0.21   lima-rancher-d
 
 -> ここで表示されたIPアドレスに対して、pod 同士で ping を通したり curl をたたいたりすることができる
 
+## pod のリソース詳細表示
+
+```
+k describe pod [pod名]
+```
+
+## Deployment の状態を見る
+
+```
+k get deployments.apps
+```
+
+以下のような出力が出てくる
+
+```
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+test   3/3     3            3           4m24s
+```
+
+## Deployment のリソース詳細表示
+
+```
+k describe deployment.apps [デプロイ名（プレフィックス部分）]
+```
+
 # コマンドの実行
 
 ## podに入って bash でコマンドを実行する
@@ -45,6 +100,23 @@ k exec -it [pod名] -- /bin/bash
 抜けるには `exit`
 
 
+# 編集
+
+## pod の編集
+
+```
+k edit pod [pod名]
+```
+
+-> デフォルトのテキストエディタ（viなど）でpodの設定を編集できる
+
+## Deployment の編集
+
+```
+k edit deployments.apps [デプロイ名（プレフィックス部分）]
+```
+
+-> Deployment の設定がデフォルトのテキストエディタ（viなど）で出てくる
 
 # 削除
 
@@ -54,3 +126,34 @@ k exec -it [pod名] -- /bin/bash
 k delete pod [pod名]
 ```
 
+## Deployment の削除
+
+
+```
+k deployments.apps [デプロイ名（プレフィックス部分）]
+```
+
+-> 成功すると、そのデプロイの配下に紐づく pod も消える
+
+# レプリカセット
+
+Deployment が直接 pod を作るわけではなく、Deployment は レプリカセットを作りそれを管理する。
+手動で直接レプリカセットを作ることは推奨されない（Deployment に管理を任せることを推奨）
+
+
+レプリカセットの状態は以下のコマンドで参照できる
+
+```
+k get replicasets.apps
+```
+
+```
+NAME              DESIRED   CURRENT   READY   AGE
+test-6546ccdcf9   10        10        10      102s
+```
+
+さらに、以下のコマンドで該当のレプリカセットの詳細を確認できる
+
+```
+k describe replicasets.apps test-6546ccdcf9(レプリカセット名)
+```
