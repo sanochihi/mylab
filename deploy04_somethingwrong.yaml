@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: test
+    hello: world
   name: test
 spec:
   replicas: 10
@@ -17,6 +18,8 @@ spec:
       containers:
       - image: httpd:alpine3.18
         name: httpd
+        command: ["/bin/bash", "-c"] 
+        args: ["sleep 5; exit1"]
   strategy:
     type: RollingUpdate
     rollingUpdate: 
