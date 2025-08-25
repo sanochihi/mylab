@@ -4,10 +4,16 @@
 
 # 作成
 
+## 単体の pod を作る
+
+```shell
+k run <pod名> --image=<image名> [-n <名前空間名>]
+```
+
 ## yamlの定義から pod/deployment を作る
 
 ```shell
-k apply -f [yamlのファイルパス]
+k apply -f <yamlのファイルパス>
 ```
 
 -> yaml の定義（kind:）がPod なら pod, Deployment ならデプロイメントができる
@@ -16,7 +22,7 @@ k apply -f [yamlのファイルパス]
 ## Deployment の作成
 
 ```shell
-k create deploy [pod名のプレフィックス] --image=[image名] --replicas=[レプリカ数]
+k create deploy <pod名のプレフィックス> --image=<image名> --replicas=<レプリカ数>
 ```
 
 ## ドライラン
@@ -26,23 +32,40 @@ pod をやデプロイメントを実際には作成せずに、定義ファイ�
 ### podの場合
 
 ```shell
-k run [pod名] --image=[image名] --dry-run=client -o yaml
+k run <pod名> --image=<image名> --dry-run=client -o yaml
 ```
 
 ### デプロイメントの場合
 
 ```shell
-k create deploy [デプロイ名] --image=[image名] --replicas=[replica数] --dry-run=client -o yaml
+k create deploy <デプロイ名> --image=<image名> --replicas=<replica数> --dry-run=client -o yaml
 ```
 
 -> これらを yaml ファイルに吐き出し、必要な部分を編集することで同じ pod や deployment を繰り返し作ることができる
 
 # 管理
 
-## podの状態を見る(簡略)
+## context
+
+現在のクラスタを確認する
+
+```
+k config current-context
+```
+
+名前空間を切り替える
+
+```
+k config set-context --current --namespace=<名前空間名>
+```
+
+
+## pod
+
+### podの状態を見る(簡略)
 
 ```shell
-k get pods
+k get pods [-n <名前空間名>]
 ```
 
 ```
@@ -51,7 +74,7 @@ httpd-chihiro   1/1     Running   0          6d20h
 nginx-chihiro   1/1     Running   0          6d20h
 ```
 
-## podの状態を見る(詳細)
+### podの状態を見る(詳細)
 
 ```shell
 k get pods -o wide
@@ -65,13 +88,15 @@ nginx-chihiro   1/1     Running   0          6d20h   10.42.0.21   lima-rancher-d
 
 -> ここで表示されたIPアドレスに対して、pod 同士で ping を通したり curl をたたいたりすることができる
 
-## pod のリソース詳細表示
+### pod のリソース詳細表示
 
 ```shell
-k describe pod [pod名]
+k describe pod <pod名>
 ```
 
-## Deployment の状態を見る
+## Deployment
+
+### Deployment の状態を見る
 
 ```shell
 k get deployments.apps
@@ -84,10 +109,10 @@ NAME   READY   UP-TO-DATE   AVAILABLE   AGE
 test   3/3     3            3           4m24s
 ```
 
-## Deployment のリソース詳細表示
+### Deployment のリソース詳細表示
 
 ```shell
-k describe deployment.apps [デプロイ名（プレフィックス部分）]
+k describe deployment.apps <デプロイ名（プレフィックス部分）>
 ```
 
 # コマンドの実行
@@ -95,7 +120,7 @@ k describe deployment.apps [デプロイ名（プレフィックス部分）]
 ## podに入って bash でコマンドを実行する
 
 ```shell
-k exec -it [pod名] -- /bin/bash
+k exec -it <pod名> -- /bin/bash
 ```
 
 抜けるには `exit`
@@ -106,7 +131,7 @@ k exec -it [pod名] -- /bin/bash
 ## pod の編集
 
 ```shell
-k edit pod [pod名]
+k edit pod <pod名>
 ```
 
 -> デフォルトのテキストエディタ（viなど）でpodの設定を編集できる
@@ -114,7 +139,7 @@ k edit pod [pod名]
 ## Deployment の編集
 
 ```shell
-k edit deployments.apps [デプロイ名（プレフィックス部分）]
+k edit deployments.apps <デプロイ名（プレフィックス部分）>
 ```
 
 -> Deployment の設定がデフォルトのテキストエディタ（viなど）で出てくる
@@ -124,14 +149,14 @@ k edit deployments.apps [デプロイ名（プレフィックス部分）]
 ## pod の削除
 
 ```shell
-k delete pod [pod名]
+k delete pod <pod名>
 ```
 
 ## Deployment の削除
 
 
 ```shell
-k deployments.apps [デプロイ名（プレフィックス部分）]
+k deployments.apps <デプロイ名（プレフィックス部分）>
 ```
 
 -> 成功すると、そのデプロイの配下に紐づく pod も消える
@@ -176,4 +201,7 @@ spec:
 
 - maxSurge - replica の数を超えて立てていい pod の数または割合
 - maxUnavailable - replica の中で unavailable になっていい podの数または割合
+
+
+-> type を Recreate にするとすべての pod が一気につぶれて作成される
 
