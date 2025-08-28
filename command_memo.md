@@ -123,7 +123,31 @@ k describe deployment.apps <デプロイ名（プレフィックス部分）>
 k exec -it <pod名> -- /bin/bash
 ```
 
+同じ pod で複数のコンテナが動いている場合は
+
+```shell
+k exec -it <pod名> -c <コンテナ名> -- /bin/bash
+```
+
+
 抜けるには `exit`
+
+
+## Service
+
+### service を見る
+
+```shell
+k get service
+```
+
+以下のような出力が出てくる
+
+```shell
+k get service
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.43.0.1    <none>        443/TCP   12d
+```
 
 
 # 編集
