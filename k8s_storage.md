@@ -67,3 +67,55 @@ scratch ディレクトリがあるのは、上記の yaml で `/scratch` を定
 （デフォルトの nginx のテンプレートなどを使った場合は、このディレクトリは存在しない）
 
 ### コンテナ間で volume を共有する
+
+以下のように、複数のコンテナが同じ volume を指すこともできる。
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-storage
+  labels:
+    app: nginx-storage
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - name: scratch-volume
+          mountPath: /scratch  # Default content directory
+    - name: busybox
+      image: busybox
+      command: ["/bin/sh", "-c"]
+      arg: ["sleep 1000"]
+      volumeMounts:
+        - name: scratch-volume
+          mountPath: /scratch  # Default content directory
+  volumes:
+    - name: scratch-volume
+      emptyDir:
+        sizeLimit: 500Mi  # This is temporary storage; it is deleted when the Pod stops
+
+```
+
+こうすると、同じ /scratch というボリュームを nginx と busybox の共有ファイルストレージとして使える。
+
+## 永続的な volume
+
+以下のように定義する
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mealie-data
+  namespace: mealie
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+```
+
+これを apply すると、 `k get persistentvolumeclaims` でこの論理ボリュームを参照できるようになるが、 `k get persistentvolumes` ではまだ参照できない。

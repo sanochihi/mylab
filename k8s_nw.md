@@ -198,7 +198,6 @@ spec:
   type: LoadBalancer
 ```
 
-
 ## yaml ファイルから service を作る
 
 Service を定義したファイル名が service.yaml の場合
@@ -206,3 +205,7 @@ Service を定義したファイル名が service.yaml の場合
 ```
 k apply -f service.yaml
 ```
+
+## Ingress 
+
+
