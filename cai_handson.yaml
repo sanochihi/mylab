@@ -1,18 +1,18 @@
 name: Cloudera AI ワークショップ
-        
+
 entries:
-   - title: Cloudera AI ワークショップ！
-     label: 解約予測
-     short_description: Build an scikit-learn model to predict churn using customer telco data, with MlFlow Experiments
-     long_description: >-
-　　　　　Cloudera AI のハンズオンのためのプロジェクトです。
-        解約予測のAMP（Applied Machine Learning Prototype）に基づき、Cloudera AI のすべての機能を試せるようになっています。
-        データの取り込みと探索、モデルのトレーニング（MLflowによる実験を含む）、最良モデルのデプロイ、そしてMLOpsによるそのパフォーマンスの追跡を行うためのコードが含まれています。
-　　　　　また、対話型の Flask アプリケーションもこのプロジェクトの一部としてデプロイされています。
-     image_path: "https://raw.githubusercontent.com/cloudera-jp/CML_AMP_Churn_Prediction_HANDSONJP/master/images/Cloudera-AI-Workshop_cover.webp"
-     tags:
+  - title: Cloudera AI ワークショップ！
+    label: 解約予測
+    short_description: Build an scikit-learn model to predict churn using customer telco data, with MLflow Experiments
+    long_description: >-
+      Cloudera AI のハンズオンのためのプロジェクトです。
+      解約予測のAMP（Applied Machine Learning Prototype）に基づき、Cloudera AI のすべての機能を試せるようになっています。
+      データの取り込みと探索、モデルのトレーニング（MLflowによる実験を含む）、最良モデルのデプロイ、そしてMLOpsによるそのパフォーマンスの追跡を行うためのコードが含まれています。
+      また、対話型の Flask アプリケーションもこのプロジェクトの一部としてデプロイされています。
+    image_path: "https://raw.githubusercontent.com/cloudera-jp/CML_AMP_Churn_Prediction_HANDSONJP/master/images/Cloudera-AI-Workshop_cover.webp"
+    tags:
       - Churn Prediction
-      - Support Vector Classiciation (SVC)
-      - MlFlow Experiments
-     git_url: "https://github.com/cloudera/CML_AMP_Churn_Prediction" 
-     is_prototype: true
+      - Support Vector Classification (SVC)
+      - MLflow Experiments
+    git_url: "https://github.com/cloudera/CML_AMP_Churn_Prediction"
+    is_prototype: true
